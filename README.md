@@ -1,192 +1,85 @@
-# Customer Churn Analysis & Customer Intelligence
+# 📊 OTT Subscription Churn Analytics & Customer Intelligence
 
-An end-to-end customer churn analysis project using SQL and Python to identify customer churn patterns, customer risk factors, and potential revenue impact.
-
-**Author:** Nishant Kumar
-
-**Tools:** Python, SQL, SQLite, Pandas, NumPy, Matplotlib, Seaborn, Jupyter Notebook
+An end-to-end data analytics and customer intelligence pipeline built to analyze subscriber churn, quantify revenue loss, and identify high-risk cohorts across subscription tiers, customer demographics, and support interactions.
 
 ---
 
-## About This Project
+## 📌 Executive Summary
 
-This project analyzes customer, subscription, and customer support data to understand why customers churn, which customer segments have higher churn, and how churn can affect revenue.
-
-The analysis focuses on three key questions:
-
-- **Who** is churning?
-- **Why** are customers churning?
-- **When** is churn occurring?
-
-The project demonstrates an end-to-end data analytics workflow using SQL and Python, including data extraction, data cleaning, feature engineering, exploratory data analysis, visualization, and business insights.
-
-This project was developed as part of my Data Analytics portfolio by following a guided data analytics tutorial and independently implementing and practicing the concepts in my own Jupyter Notebook.
+* **Overall Churn Rate**: **28.6%** (Retention Rate: 71.4%)
+* **Contract Risk Disparity**: Monthly contract subscribers churn at **55.6%**, compared to just **8.3%** for annual subscribers (a ~6.7x risk multiplier).
+* **Financial Impact**: Identified **$74/mo in direct MRR leakage** and **$2,047 in total CLTV loss**, representing an **18% total revenue loss**.
+* **Geographic & Temporal Trends**: Churn spiked sharply in **September 2024**, with **Karnataka** experiencing the highest concentration of churned accounts.
 
 ---
 
-## Business Problem
-
-Customer churn is an important challenge for subscription-based businesses.
-
-The objective of this project is to analyze customer behavior and identify patterns associated with churn.
-
-The analysis looks at:
-
-- Customer demographics
-- Subscription plans
-- Contract types
-- Customer tenure
-- Monthly charges
-- Customer lifetime value (CLTV)
-- Churn scores
-- Customer complaints
-- Support escalations
-- Churn by geography
-- Revenue impact of churn
-
-The goal is to convert these findings into actionable recommendations that can support customer retention strategies.
+## 🛠️ Architecture & Tech Stack
+* **Core Language**: Python (Pandas, NumPy)
+* **Database & Querying**: SQLite via `sqlite3` and Pandas SQL integrations
+* **Data Visualization**: Matplotlib & Seaborn
+* **Environment**: Jupyter Notebook
 
 ---
 
-## Dataset Structure
+## 🗄️ Relational Data Model
 
-The project uses a SQLite database named `customer_churn` containing three relational tables.
+The pipeline extracts and joins relational tables from the `customer_churn` database:
 
-### 1. `db_customer`
-
-Contains customer demographic information.
-
-| Column | Description |
-|---|---|
-| `customerid` | Unique customer identifier |
-| `name` | Customer name |
-| `country` | Customer country |
-| `state` | Customer state |
-| `gender` | Customer gender |
-| `dob` | Date of birth |
-| `interests` | Customer interests |
-| `pincode` | Customer postal code |
-
-### 2. `db_subscription`
-
-Contains customer subscription and financial information.
-
-| Column | Description |
-|---|---|
-| `customerid` | Unique customer identifier |
-| `subscription_start_date` | Subscription start date |
-| `subscription_type` | Subscription type |
-| `renewal_date` | Renewal date |
-| `plan_type` | Basic, Standard, or Premium |
-| `contract_type` | Contract type |
-| `cancellation_date` | Cancellation date |
-| `cancellation_reason` | Reason for cancellation |
-| `monthly_charges` | Monthly customer charges |
-| `cltv` | Customer lifetime value |
-| `churn_score` | Customer churn risk score |
-
-### 3. `db_support`
-
-Contains customer support information.
-
-| Column | Description |
-|---|---|
-| `customerid` | Unique customer identifier |
-| `complaint_date` | Complaint date |
-| `escalations` | Number of escalations |
-| `csat_score` | Customer satisfaction score |
-| `comment` | Support comment |
+1. **`db_customer`**: `customerid`, `name`, `country`, `state`, `gender`, `dob`, `interests`, `pincode`
+2. **`db_subscription`**: `customerid`, `subscription_start_date`, `renewal_date`, `cancellation_date`, `plan_type`, `contract_type`, `monthly_charges`, `cltv`, `churn_score`
+3. **`db_support`**: `customerid`, `complaint_date`, `escalations`, `csat_score`, `cancellation_reason`, `comment`
 
 ---
 
-## Tools & Technologies
+## 🔄 Project Workflow & Roadmap
 
-### Programming & Analysis
-- Python
-- Pandas
-- NumPy
+### 1. Data Ingestion & SQL Extraction
+* Established Python database connection using `sqlite3`.
+* Executed SQL queries (`JOIN`, `GROUP BY`, multi-table merging) to construct unified analytical datasets.
 
-### Database & SQL
-- SQL
-- SQLite
-- `sqlite3`
-- SQL queries executed from Python
+### 2. Data Cleaning & Preprocessing
+* Handled missing/null values, standardized date formats, and transformed data types.
+* Dropped redundant columns and performed quality check (QC) verifications.
 
-### Data Visualization
-- Matplotlib
-- Seaborn
-
-### Development Environment
-- Jupyter Notebook
+### 3. Feature Engineering & Key Metrics
+Engineered calculated fields and 20+ KPIs to model customer retention:
+* **Average Tenure**: `AVG(DATEDIFF(cancellation_date, subscription_start_date))` = **1,451 days**
+* **ARPU (Average Revenue Per User)**: `SUM(monthly_charges) / COUNT(active_customers)` = **$18.80**
+* **Revenue Risk Scoring**: Quantified revenue leakage for customers with `churn_score > 70`.
+* **Support Friction Correlation**: Analyzed correlation between support escalation rates and churn likelihood.
 
 ---
 
-## Project Workflow
+## 📊 Key Business Insights & Findings
 
-### 1. SQL Database Connection
-
-Connected Python to the SQLite database using `sqlite3`.
-
-SQL queries were used to extract relevant customer, subscription, and support data for analysis.
-
-### 2. Data Cleaning
-
-Performed data cleaning and quality checks using Pandas and NumPy.
-
-Activities included:
-
-- Checking data types
-- Renaming columns
-- Selecting required columns
-- Checking missing values
-- Handling null values
-- Removing unnecessary columns
-- Standardizing categorical values
-- Converting date fields into appropriate formats
-
-### 3. Feature Engineering
-
-Created additional fields required for customer churn analysis.
-
-The analysis included calculated attributes related to:
-
-- Customer age
-- Customer tenure
-- Churn status
-- Churn risk
-- Subscription information
-- Customer support activity
-
-### 4. Data Analysis
-
-Performed exploratory data analysis using:
-
-- GroupBy
-- Aggregations
-- Filtering
-- Pivot tables
-- Churn rate calculations
-- Segment-level analysis
-- Correlation analysis
-
-### 5. Data Visualization
-
-Created visualizations using Matplotlib and Seaborn to understand:
-
-- Monthly churn trends
-- Churn by subscription plan
-- Churn by state
-- Relationships between customer attributes
-- Correlation between churn-related variables
-- Customer segment behavior
+| Metric / Analysis | Key Finding | Strategic Impact |
+| :--- | :--- | :--- |
+| **Contract Type** | Monthly churn is **55.6%** vs Annual churn at **8.3%**. | Shift acquisition campaigns toward annual plans to stabilize retention. |
+| **Plan Type** | Majority of churned volume belongs to **Basic Tier** subscribers. | Lower immediate impact on overall revenue, but indicates entry-tier vulnerability. |
+| **Geographic Spike** | **Karnataka** showed a significant churn anomaly in **September 2024**. | Warrants investigation into localized price changes, regional outages, or competitor activity. |
+| **Support Escalations** | Higher escalation counts directly correlate with high churn scores. | Escalated support requests serve as an early warning indicator for proactive outreach. |
 
 ---
 
-## Key Business Metrics
+## 🚀 Actionable Recommendations
 
-The project calculated several metrics to evaluate customer churn and its business impact.
+1. **Contract Migration Strategy**: Implement automated discount incentives for monthly subscribers converting to annual plans to reduce the 55.6% monthly churn rate.
+2. **Targeted At-Risk Retention**: Filter accounts with high churn scores (`> 70`) and high CLTV to prioritize personalized retention offers (SMS/Email/Direct Calls) before cancellation.
+3. **Regional Post-Mortem**: Investigate localized service complaints, pricing changes, or competitor promotional campaigns active in Karnataka during September 2024.
 
-### Churn Rate
+---
 
-```text
-Churned Customers / Total Customers# Customer-Churn-Analysis
+## ⚙️ How to Run Locally
+
+### Prerequisites
+* Python 3.8+
+* Jupyter Notebook or JupyterLab
+
+### Installation
+```bash
+# Clone the repository
+git clone [https://github.com/your-username/churn-analysis-customer-intelligence.git](https://github.com/your-username/churn-analysis-customer-intelligence.git)
+cd churn-analysis-customer-intelligence
+
+# Install required packages
+pip install pandas numpy matplotlib seaborn sqlite3
